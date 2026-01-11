@@ -1,4 +1,4 @@
-# 🦅 A.R.C.S. (Aerial Rescue & Color Search System)
+#  A.R.C.S. (Aerial Rescue & Color Search System)
 
 ![Java](https://img.shields.io/badge/Language-Java-orange)
 ![Library](https://img.shields.io/badge/Library-JavaCV%20%2F%20OpenCV-blue)
