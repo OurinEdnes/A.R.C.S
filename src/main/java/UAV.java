@@ -6,7 +6,7 @@ public class UAV {
     protected float x;
     protected float y;
     protected float z;
-    private UavComp sensor; // Composite
+    protected UavComp sensor; // Composite
 
     public UAV(String cordinat, String stat, float batt, String ID, UavComp sensor) {
         this.Cordinat = cordinat;
@@ -18,8 +18,7 @@ public class UAV {
         String[] part = cordinat.split(","); // pisah koordinat by koma
 
         this.x = Float.parseFloat(part[0]);
-        this.y = Float.parseFloat(part[1]);
-        this.z = Float.parseFloat(part[2]);
+        this.z = Float.parseFloat(part[1]);
     }
 
     // ==== Setter ====

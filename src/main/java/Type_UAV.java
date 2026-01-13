@@ -7,19 +7,19 @@ public class Type_UAV extends UAV {
         super(coordinate, stat, batt, ID, sensor);
 
         if (a == 1) {
-            this.type = "DeliveryDrone";
-            this.fungsi = "Mengirim barang";
+            this.type = "Fixed Wing Long Range";
         } else if (a == 2) {
-            this.type = "SurveyDrone";
-            this.fungsi = "Pemantauan dan pemetaan wilayah";
+            this.type = "V-TOL";
         } else if (a == 3) {
-            this.type = "RescueDrone";
-            this.fungsi = "Operasi penyelamatan darurat";
+            this.type = "Lela";
         } else {
             this.type = "UnknownDrone";
             this.fungsi = "Tidak diketahui";
+            return;
         }
+        this.fungsi = "Operasi penyelamatan darurat";
     }
+
 
     public String getFungsi() {
         return fungsi;
