@@ -39,6 +39,12 @@ public class Main {
         task1.startMission();
         gcs.monitorAll();
 
+        System.out.println("Launching GCS Dashboard...");
+
+// Kita pilih drone pertama (index 0) buat dikontrol lewat GUI
+// Bisa juga bikin menu drop-down nanti buat milih drone
+        DashboardGUI dashboard = new DashboardGUI(UAVStat.get(0), Krit.get(0));
+
         System.out.println("================================");
         System.out.println("Put ID for Start!");
         System.out.print("Start Drone: ");
