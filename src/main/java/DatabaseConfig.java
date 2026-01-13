@@ -7,11 +7,15 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 
 public class DatabaseConfig {
-     String LogCord = "";
-     String UavDataBase = "";
+    public String LogCord = "C:\\Project Folder\\GitHub\\A.R.C.S\\src\\main\\java\\UAV-LOG\\20260113-182529.txt";
 
     private String alltitude;
     private String longtitude;
+
+    public UavComp UavComp;
+    public Type_UAV;
+    public Pilot;
+
 
 
 }
