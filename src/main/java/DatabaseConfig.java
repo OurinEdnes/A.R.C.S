@@ -9,9 +9,19 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DatabaseConfig {
-    // 📍 Path Database & Log File (Sesuaikan sama path Senpai ya!)
-    static final String Uav_Log_DB = "jdbc:sqlite:C:/Project Folder/GitHub/A.R.C.S/src/main/java/UAV-LOG/UAV-Log.db";
-    public String LogCord = "C:/Project Folder/GitHub/A.R.C.S/src/main/java/UAV-LOG/20260113-182529.txt"; // Ganti ke nama file txt yg bener
+
+    // Ini bakal return path kayak "C:/Project Folder/GitHub/A.R.C.S" atau "/home/user/A.R.C.S"
+    private static final String PROJECT_ROOT = System.getProperty("user.dir");
+
+    //  Path Database & Log File
+    // Kita sambungin PROJECT_ROOT + folder struktur di dalamnya.
+    // Pake File.separator biar aman mau di Windows (\) atau Linux (/)
+    static final String DB_PATH = PROJECT_ROOT + "/src/main/java/UAV-LOG/UAV-Log.db";
+    static final String TXT_PATH = PROJECT_ROOT + "/src/main/java/UAV-LOG/20260113-182529.txt";
+
+    // Format JDBC buat SQLite tetep butuh prefix
+    static final String Uav_Log_DB = "jdbc:sqlite:" + DB_PATH;
+    public String LogCord = TXT_PATH;
 
     // Variable Data Dinamis (Dari TXT)
     public String alltitude;
@@ -19,15 +29,16 @@ public class DatabaseConfig {
     public String longitude_Z;
 
     // Object Data Statis (Dari Database SQLite)
-    public UavComp UavComp; // Object Komponen
+    public UavComp UavComp;
     public Type_UAV typeUAV;
     public Pilot pilot;
     public GCS gcs;
     public FlightMission flightMission;
 
-    // 🏗️ CONSTRUCTOR UTAMA
     public DatabaseConfig() throws FrameGrabber.Exception {
-        System.out.println("🦈 Loading Konfigurasi A.R.C.S...");
+        System.out.println("Loading Konfigurasi A.R.C.S...");
+        System.out.println("Deteksi Root Project: " + PROJECT_ROOT);
+        System.out.println("Target Database: " + DB_PATH);
 
         // 1. AMBIL DATA DINAMIS (Dari File TXT via jurus Tail)
         String lastLine = tail(LogCord);
@@ -39,11 +50,11 @@ public class DatabaseConfig {
                 this.longitude_Z = temp[3];
                 this.alltitude = temp[5] + " mdpl";
             } catch (Exception e) {
-                System.out.println("💥 Error parsing TXT: " + e.getMessage());
+                System.out.println(" Error parsing TXT: " + e.getMessage());
             }
+        } else {
+            System.out.println("Warning: File Log TXT tidak ditemukan di path: " + LogCord);
         }
-
-        // 2. AMBIL DATA STATIS (Dari Database SQLite)
 
         // === UavComp ===
         String dataComp = GetLog("SELECT * FROM UAV_Components LIMIT 1");
@@ -52,7 +63,6 @@ public class DatabaseConfig {
             boolean hasLidar = (c.length > 2 && !c[2].equalsIgnoreCase("null") && !c[2].isEmpty());
             boolean hasThermal = (c.length > 3 && !c[3].equalsIgnoreCase("null") && !c[3].isEmpty());
 
-            // ID di index 0, logic boolean custom
             this.UavComp = new UavComp(c[1], hasLidar, hasThermal, 1);
         }
 
@@ -64,9 +74,8 @@ public class DatabaseConfig {
             try {
                 krit = Integer.parseInt(t[1]);
             } catch (NumberFormatException e) {
-                // Handle jika parsing gagal
+                // Handle error parsing
             }
-            // Format: (Lokasi, Status, Baterai, ID, Kritikal, KomponenObjek)
             this.typeUAV = new Type_UAV(this.latitude_X + "," + this.longitude_Z + "," + this.alltitude, "DISARMING", 100.0f, t[0], krit, this.UavComp);
         }
 
@@ -88,20 +97,24 @@ public class DatabaseConfig {
         String dataMission = GetLog("SELECT * FROM Mission_Task LIMIT 1");
         if (dataMission != null) {
             String[] m = dataMission.split(",");
-            // Asumsi constructor FlightMission(Name, Objective, Type_UAV)
             this.flightMission = new FlightMission(m[1], m[2], this.typeUAV);
         }
 
-        System.out.println("✅ Konfigurasi Selesai Diload!");
+        System.out.println("Konfigurasi Selesai Diload!");
     }
 
     // 🥷 JURUS TAIL
     public static String tail(String filePath) {
         File file = new File(filePath);
-        if (!file.exists()) return null;
+        if (!file.exists()) {
+            System.out.println("File tidak ditemukan: " + filePath);
+            return null;
+        }
 
         try (RandomAccessFile fileHandler = new RandomAccessFile(file, "r")) {
             long fileLength = fileHandler.length() - 1;
+            if (fileLength < 0) return null; // Handle empty file
+
             StringBuilder sb = new StringBuilder();
 
             for (long pointer = fileLength; pointer != -1; pointer--) {
@@ -126,6 +139,13 @@ public class DatabaseConfig {
     // 📦 JURUS GETLOG
     public static String GetLog(String query) {
         StringBuilder sb = new StringBuilder();
+        // Pastikan driver SQLite ke-load (kadang perlu di beberapa setup)
+        try {
+            Class.forName("org.sqlite.JDBC");
+        } catch (ClassNotFoundException e) {
+            System.out.println("SQLite Driver not found via Class.forName (Might differ based on dependency)");
+        }
+
         try (Connection conn = DriverManager.getConnection(Uav_Log_DB);
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
@@ -145,13 +165,13 @@ public class DatabaseConfig {
             }
 
         } catch (SQLException e) {
-            System.out.println("💥 Gagal baca DB: " + e.getMessage());
+            System.out.println("Gagal baca DB di path: " + Uav_Log_DB);
+            System.out.println("Pesan Error: " + e.getMessage());
             return null;
         }
         return sb.toString();
     }
 
-    // Override toString biar pas di-print di Main outputnya ganteng
     @Override
     public String toString() {
         return "=== STATUS DATABASE A.R.C.S ===\n" +

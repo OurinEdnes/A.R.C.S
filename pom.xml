@@ -24,6 +24,25 @@
             <artifactId>slf4j-nop</artifactId>
             <version>1.7.25</version> <!-- Or another SLF4J adapter -->
         </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-controls</artifactId>
+            <version>21</version>
+        </dependency>
+
+        <!-- 2. Pasukan Browser (Web - INI WAJIB BUAT MAPS) -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-web</artifactId>
+            <version>21</version>
+        </dependency>
+
+        <!-- 3. Pasukan Jembatan (Swing - Biar bisa nempel di JFrame) -->
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-swing</artifactId>
+            <version>21</version>
+        </dependency>
     </dependencies>
     <repositories>
         <repository>

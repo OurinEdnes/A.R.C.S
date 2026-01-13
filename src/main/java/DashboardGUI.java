@@ -6,6 +6,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javafx.application.Platform;
+import javafx.embed.swing.JFXPanel;
+import javafx.scene.Scene;
+import javafx.scene.web.WebView;
+
 public class DashboardGUI extends JFrame {
     // Komponen GUI
     private JLabel lblStatus, lblBatt, lblCoord, lblID;
@@ -17,6 +22,11 @@ public class DashboardGUI extends JFrame {
     private Type_UAV selectedDrone;
     private UavComp droneSensor;
 
+    // System.getProperty("user.dir") = Mengambil folder root project secara otomatis
+    // Jadi mau folder projectnya dipindah kemana aja, dia tetep tau jalan pulang!
+    // Asumsi: File S12.png ada di folder paling luar project (A.R.C.S/)
+    public String PATH_GAMBAR_PETA = System.getProperty("user.dir") + "/S12.png";
+
     public DashboardGUI(Type_UAV drone, UavComp sensor) {
         this.selectedDrone = drone;
         this.droneSensor = sensor;
@@ -27,15 +37,67 @@ public class DashboardGUI extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Ganti tema jadi Gelap ala Hacker 😎
         getContentPane().setBackground(Color.DARK_GRAY);
 
-        // === PANEL KIRI (Visualisasi Dummy / Tempat Kamera nanti) ===
-        JPanel panelKiri = new JPanel();
-        panelKiri.setBackground(Color.BLACK);
-        panelKiri.setBorder(BorderFactory.createTitledBorder("Live Feed Placeholder"));
-        panelKiri.setPreferredSize(new Dimension(500, 500));
-        add(panelKiri, BorderLayout.CENTER);
+//        JFXPanel panelPeta = new JFXPanel();
+//        panelPeta.setBorder(BorderFactory.createTitledBorder("📍 Live Tracking Map"));
+//        panelPeta.setPreferredSize(new Dimension(500, 500));
+//
+//        add(panelPeta, BorderLayout.CENTER);
+//
+//        String htmlMap = "<html>"
+//                + "<head>"
+//                + "    <title>UAV Tracking</title>"
+//                + "    <style>"
+//                + "       html, body, gmp-map { height: 100%; margin: 0; padding: 0; }"
+//                + "    </style>"
+//                // Script Google Maps (Jangan lupa API KEY-nya ya Senpai!)
+//                + "    <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyA6myHzS10YXdcazAFalmXvDkrYCp5cLc8&libraries=maps,marker&v=weekly' defer></script>"
+//                + "</head>"
+//                + "<body>"
+//                + "    <gmp-map center='-7.82364089, 110.38523845' zoom='14' map-id='DEMO_MAP_ID'>"
+//                + "        <gmp-advanced-marker position='-7.82364089, 110.38523845' title='Posisi UAV'></gmp-advanced-marker>"
+//                + "    </gmp-map>"
+//                + "</body>"
+//                + "</html>";
+//
+//        Platform.runLater(() -> {
+//            WebView webView = new WebView();
+//            // Load HTML String tadi ke dalam browser mini ini
+//            webView.getEngine().loadContent(htmlMap);
+//
+//            // Masukin browsernya ke panel
+//            panelPeta.setScene(new Scene(webView));
+//        });
+
+        // === PANEL KIRI (GAMBAR STATIS) ===
+        JPanel panelPeta = new JPanel(new BorderLayout());
+        panelPeta.setBorder(BorderFactory.createTitledBorder("📍 Area Operasi (Static Map)"));
+        panelPeta.setPreferredSize(new Dimension(600, 500));
+        panelPeta.setBackground(Color.BLACK); // Background hitam biar elegan
+
+        // Logic Load Gambar
+        // Debugging: Print path-nya biar Senpai tau dia nyari kemana
+
+        ImageIcon originalIcon = new ImageIcon(PATH_GAMBAR_PETA);
+
+        // Cek gambarnya ketemu gak? (Kalau width -1 berarti gak ketemu)
+        if (originalIcon.getIconWidth() == -1) {
+            // Kalau gambar GAK ADA, tampilin pesan error keren
+            JLabel errorLabel = new JLabel("<html><center>❌ MAP IMAGE NOT FOUND<br>Pastikan file S12.png ada di:<br>" + PATH_GAMBAR_PETA + "</center></html>", SwingConstants.CENTER);
+            errorLabel.setForeground(Color.RED);
+            errorLabel.setFont(new Font("Monospaced", Font.BOLD, 12));
+            panelPeta.add(errorLabel, BorderLayout.CENTER);
+        } else {
+            Image img = originalIcon.getImage();
+
+            Image resizedImg = img.getScaledInstance(600, 480, Image.SCALE_SMOOTH);
+            JLabel mapLabel = new JLabel(new ImageIcon(resizedImg));
+
+            panelPeta.add(mapLabel, BorderLayout.CENTER);
+        }
+
+        add(panelPeta, BorderLayout.CENTER);
 
         // === PANEL KANAN (Kontrol & Telemetry) ===
         JPanel panelKanan = new JPanel();
@@ -52,7 +114,7 @@ public class DashboardGUI extends JFrame {
         lblStatus = buatLabel("STATUS: " + drone.getStat());
         lblStatus.setForeground(Color.RED); // Awalnya Merah (Disarmed)
 
-        lblCoord = buatLabel("LOC: " + drone.getCordinat());
+        lblCoord = buatLabel("LOC: " + drone.getX() +  ", " + drone.getZ());
 
         // Bar Baterai
         barBaterai = new JProgressBar(0, 100);

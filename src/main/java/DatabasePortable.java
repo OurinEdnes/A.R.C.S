@@ -1,3 +1,4 @@
+import java.io.File;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,10 +8,24 @@ import java.sql.Statement;
 
 public class DatabasePortable {
 
-    static final String DB_URL = "jdbc:sqlite:C:/Project Folder/GitHub/A.R.C.S/src/main/java/UAV-LOG/UAV-Log.db";
+    // 🦈 Aiko Upgrade: Path Dinamis (Jurus Anti-Nyasar)
+    // 1. Cari tau kita lagi di folder mana
+    private static final String PROJECT_ROOT = System.getProperty("user.dir");
+
+    // 2. Sambungin ke lokasi database di dalam project structure
+    private static final String DB_PATH = PROJECT_ROOT + "/src/main/java/UAV-LOG/UAV-Log.db";
+
+    // 3. Format JDBC URL buat SQLite
+    static final String DB_URL = "jdbc:sqlite:" + DB_PATH;
 
     public static void main(String[] args) {
-        System.out.println(" --- MEMULAI SISTEM DATABASE A.R.C.S --- \n");
+        System.out.println(" --- MEMULAI SISTEM DATABASE A.R.C.S (PORTABLE MODE) --- \n");
+
+        // Debugging Path biar Senpai tenang hatinya
+        System.out.println("📂 Root Project : " + PROJECT_ROOT);
+        System.out.println("🎯 Target DB    : " + DB_PATH);
+        System.out.println("🔗 JDBC URL     : " + DB_URL);
+        System.out.println("--------------------------------------------------\n");
 
         createNewTables();
 
@@ -50,6 +65,9 @@ public class DatabasePortable {
                 "CREATE TABLE IF NOT EXISTS Mission_Task (id INTEGER PRIMARY KEY, MissionName TEXT, Objective TEXT);"
         };
 
+        // Load Driver Explicitly (Just in case)
+        try { Class.forName("org.sqlite.JDBC"); } catch (Exception e) {}
+
         try (Connection conn = DriverManager.getConnection(DB_URL);
              Statement stmt = conn.createStatement()) {
 
@@ -59,7 +77,8 @@ public class DatabasePortable {
             System.out.println("Status: Struktur Database Siap Tempur!");
 
         } catch (SQLException e) {
-            System.out.println("Gagal bikin tabel: " + e.getMessage());
+            System.out.println("💥 Gagal bikin tabel: " + e.getMessage());
+            System.out.println("Cek apakah folder 'UAV-LOG' sudah ada?");
         }
     }
 
