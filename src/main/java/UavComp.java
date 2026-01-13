@@ -1,5 +1,6 @@
 import org.bytedeco.javacv.*;
 import org.bytedeco.opencv.opencv_core.*;
+import org.bytedeco.javacv.FFmpegFrameGrabber.*;
 import static org.bytedeco.opencv.global.opencv_core.*;
 import static org.bytedeco.opencv.global.opencv_imgproc.*;
 import static org.bytedeco.opencv.global.opencv_highgui.*;
@@ -18,7 +19,9 @@ public class UavComp implements CamView{
         this.camera = camera;
         this.lidar = lidar;
         this.thermal = thermal;
+
         this.grabber = new OpenCVFrameGrabber(alamatCam);
+        grabber.setFormat("mjpeg");
         this.converter = new OpenCVFrameConverter.ToMat();
     }
 
@@ -94,7 +97,7 @@ public class UavComp implements CamView{
                 }
             }
 
-            imshow("UUAV-CAM_View", img);
+            imshow("UAV-CAM_View", img);
             if (waitKey(30) >= 0) break;
         }
 
