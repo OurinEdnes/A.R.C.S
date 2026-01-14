@@ -1,9 +1,13 @@
 import org.bytedeco.javacv.*;
 import org.bytedeco.opencv.opencv_core.*;
 import org.bytedeco.javacv.FFmpegFrameGrabber.*;
+
+import java.lang.Exception;
+
 import static org.bytedeco.opencv.global.opencv_core.*;
 import static org.bytedeco.opencv.global.opencv_imgproc.*;
 import static org.bytedeco.opencv.global.opencv_highgui.*;
+
 
 public class UavComp implements CamView{
     private String camera;
@@ -29,8 +33,18 @@ public class UavComp implements CamView{
         this.camera = camera;
         this.lidar = lidar;
         this.thermal = thermal;
-        this.grabber = new OpenCVFrameGrabber(alamatCam);
-        grabber.start();
+
+        try {
+            this.grabber = new OpenCVFrameGrabber(alamatCam);
+            this.grabber.start();
+
+        } catch (Exception e) {
+            System.out.println("/camAdd tidak ditemukan---- Masuk setelan default...");
+            // Fallback ke kamera 0
+            this.grabber = new OpenCVFrameGrabber(0);
+            this.grabber.start();
+        }
+
         this.converter = new OpenCVFrameConverter.ToMat();
     }
 
@@ -70,6 +84,9 @@ public class UavComp implements CamView{
             Scalar lowerRed2 = new Scalar(160, 100, 100, 0);
             Scalar upperRed2 = new Scalar(179, 255, 255, 0);
 
+            Scalar lowerYellow = new Scalar(20, 0, 0, 0);
+            Scalar upperYellow = new Scalar(35, 255, 255, 0);
+
             Mat mask1 = new Mat();
             Mat mask2 = new Mat();
             Mat mask = new Mat();
@@ -91,12 +108,16 @@ public class UavComp implements CamView{
                     Rect rect = boundingRect(contour);
 
                     rectangle(img, rect, new Scalar(0, 255, 0, 0), 2, LINE_8, 0);
+                    rectangle(mask, rect, new Scalar(255, 255, 255, 0), 2, LINE_8, 0);
 
                     putText(img, "Hipotesis Korban", new Point(rect.x(), rect.y() - 10),
-                            FONT_HERSHEY_PLAIN, 0.7, new Scalar(0, 255, 204, 0), 1, LINE_AA, false);
+                            FONT_HERSHEY_PLAIN, 0.7, new Scalar(0, 0, 0, 0), 1, LINE_AA, false);
+                    putText(mask, "Hipotesis Korban", new Point(rect.x(), rect.y() - 10),
+                            FONT_HERSHEY_PLAIN, 0.7, new Scalar(255, 255, 255, 0), 1, LINE_AA, false);
                 }
             }
 
+            imshow("UAV-CAM-Mask-Treshold", mask);
             imshow("UAV-CAM_View", img);
             if (waitKey(30) >= 0) break;
         }
