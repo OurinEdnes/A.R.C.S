@@ -84,15 +84,15 @@ public class UavComp implements CamView{
             Scalar lowerRed2 = new Scalar(160, 100, 100, 0);
             Scalar upperRed2 = new Scalar(179, 255, 255, 0);
 
-            Scalar lowerYellow = new Scalar(20, 0, 0, 0);
+            Scalar lowerYellow = new Scalar(20, 100, 100, 0);
             Scalar upperYellow = new Scalar(35, 255, 255, 0);
 
             Mat mask1 = new Mat();
             Mat mask2 = new Mat();
             Mat mask = new Mat();
 
-            inRange(hsv, new Mat(lowerRed), new Mat(upperRed), mask1);
-            inRange(hsv, new Mat(lowerRed2), new Mat(upperRed2), mask2);
+            inRange(hsv, new Mat(lowerYellow), new Mat(upperYellow), mask1);
+            inRange(hsv, new Mat(lowerYellow), new Mat(upperYellow), mask2);
             addWeighted(mask1, 1.0, mask2, 1.0, 0.0, mask);
 
             MatVector contours = new MatVector();
