@@ -7,7 +7,7 @@
 
 > **"The Second Eye for Search & Rescue Operations."**
 
-## 📖 About The Project
+## About The Project
 
 **A.R.C.S.** (Aerial Rescue & Color Search System) adalah sebuah purwarupa perangkat lunak (*software prototype*) yang dikembangkan untuk membantu operasi pencarian korban bencana (SAR), khususnya pada kasus kecelakaan air (*Laka Air*) dan bencana alam.
 
@@ -17,17 +17,17 @@ Project ini dikembangkan sebagai studi kasus penerapan **Object Oriented Program
 
 ---
 
-## 🚀 Key Features
+## Key Features
 
-✅ **Smart Color Detection**
+**Smart Color Detection**
 Mendeteksi objek berdasarkan spektrum warna HSV (Hue, Saturation, Value) spesifik, dioptimalkan untuk warna oranye/merah (Life Vest standar BPBD).
 
-✅ **Flexible Input Source**
+**Flexible Input Source**
 Mendukung input dari Webcam USB, IP Camera (RTSP/HTTP), maupun file video rekaman (untuk simulasi pasca-bencana), Ataumun fstream.
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 * **Language:** Java (JDK 17+)
 * **Computer Vision Library:** [JavaCV](https://github.com/bytedeco/javacv) (Wrapper for OpenCV)
