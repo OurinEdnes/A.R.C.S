@@ -14,7 +14,6 @@ public class DatabaseConfig {
     private static final String PROJECT_ROOT = System.getProperty("user.dir");
 
     //  Path Database & Log File
-    // Kita sambungin PROJECT_ROOT + folder struktur di dalamnya.
     // Pake File.separator biar aman mau di Windows (\) atau Linux (/)
     static final String DB_PATH = PROJECT_ROOT + "/src/main/java/UAV-LOG/UAV-Log.db";
     static final String TXT_PATH = PROJECT_ROOT + "/src/main/java/UAV-LOG/20260113-182529.txt";

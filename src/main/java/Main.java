@@ -4,7 +4,6 @@ public class Main {
     public static void main(String[] args) throws IOException {
         DatabaseConfig databaseConfig = new DatabaseConfig();
         System.out.println(databaseConfig.toString());
-
         System.out.println("Launching GCS Dashboard...");
 
         DashboardGUI dashboard = new DashboardGUI(databaseConfig.typeUAV, databaseConfig.UavComp);

@@ -26,6 +26,7 @@ public class UavComp implements CamView{
 
         this.grabber = new OpenCVFrameGrabber(alamatCam);
         grabber.setFormat("mjpeg");
+        this.grabber.start();
         this.converter = new OpenCVFrameConverter.ToMat();
     }
 
@@ -91,8 +92,8 @@ public class UavComp implements CamView{
             Mat mask2 = new Mat();
             Mat mask = new Mat();
 
-            inRange(hsv, new Mat(lowerYellow), new Mat(upperYellow), mask1);
-            inRange(hsv, new Mat(lowerYellow), new Mat(upperYellow), mask2);
+            inRange(hsv, new Mat(lowerRed), new Mat(upperRed), mask1);
+            inRange(hsv, new Mat(lowerRed2), new Mat(upperRed2), mask2);
             addWeighted(mask1, 1.0, mask2, 1.0, 0.0, mask);
 
             MatVector contours = new MatVector();

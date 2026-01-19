@@ -39,63 +39,61 @@ public class DashboardGUI extends JFrame {
 
         getContentPane().setBackground(Color.DARK_GRAY);
 
-//        JFXPanel panelPeta = new JFXPanel();
-//        panelPeta.setBorder(BorderFactory.createTitledBorder("📍 Live Tracking Map"));
-//        panelPeta.setPreferredSize(new Dimension(500, 500));
+        JFXPanel panelPeta = new JFXPanel();
+        panelPeta.setBorder(BorderFactory.createTitledBorder("📍 Live Tracking Map"));
+        panelPeta.setPreferredSize(new Dimension(500, 500));
+
+        add(panelPeta, BorderLayout.CENTER);
+
+        String htmlMap = "<html>"
+                + "<head>"
+                + "    <title>UAV Tracking</title>"
+                + "    <style>"
+                + "       html, body, gmp-map { height: 100%; margin: 0; padding: 0; }"
+                + "    </style>"
+                // Script Google Maps (Jangan lupa API KEY-nya ya Senpai!)
+                + "    <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyA6myHzS10YXdcazAFalmXvDkrYCp5cLc8&libraries=maps,marker&v=weekly' defer></script>"
+                + "</head>"
+                + "<body>"
+                + "    <gmp-map center='-7.82364089, 110.38523845' zoom='14' map-id='DEMO_MAP_ID'>"
+                + "        <gmp-advanced-marker position='-7.82364089, 110.38523845' title='Posisi UAV'></gmp-advanced-marker>"
+                + "    </gmp-map>"
+                + "</body>"
+                + "</html>";
+
+        Platform.runLater(() -> {
+            WebView webView = new WebView();
+            // Load HTML String tadi ke dalam browser mini ini
+            webView.getEngine().loadContent(htmlMap);
+
+            // Masukin browsernya ke panel
+            panelPeta.setScene(new Scene(webView));
+        });
+
+//        // === PANEL KIRI (GAMBAR STATIS) ===
+//        JPanel panelPeta = new JPanel(new BorderLayout());
+//        panelPeta.setBorder(BorderFactory.createTitledBorder("📍 Area Operasi (Static Map)"));
+//        panelPeta.setPreferredSize(new Dimension(600, 500));
+//        panelPeta.setBackground(Color.BLACK); // Background hitam biar elegan
 //
-//        add(panelPeta, BorderLayout.CENTER);
+//        // Logic Load Gambar
 //
-//        String htmlMap = "<html>"
-//                + "<head>"
-//                + "    <title>UAV Tracking</title>"
-//                + "    <style>"
-//                + "       html, body, gmp-map { height: 100%; margin: 0; padding: 0; }"
-//                + "    </style>"
-//                // Script Google Maps (Jangan lupa API KEY-nya ya Senpai!)
-//                + "    <script src='https://maps.googleapis.com/maps/api/js?key=AIzaSyA6myHzS10YXdcazAFalmXvDkrYCp5cLc8&libraries=maps,marker&v=weekly' defer></script>"
-//                + "</head>"
-//                + "<body>"
-//                + "    <gmp-map center='-7.82364089, 110.38523845' zoom='14' map-id='DEMO_MAP_ID'>"
-//                + "        <gmp-advanced-marker position='-7.82364089, 110.38523845' title='Posisi UAV'></gmp-advanced-marker>"
-//                + "    </gmp-map>"
-//                + "</body>"
-//                + "</html>";
+//        ImageIcon originalIcon = new ImageIcon(PATH_GAMBAR_PETA);
 //
-//        Platform.runLater(() -> {
-//            WebView webView = new WebView();
-//            // Load HTML String tadi ke dalam browser mini ini
-//            webView.getEngine().loadContent(htmlMap);
+//        if (originalIcon.getIconWidth() == -1) {
+//            // Kalau gambar GAK ADA, tampilin pesan error keren
+//            JLabel errorLabel = new JLabel("<html><center>❌ MAP IMAGE NOT FOUND<br>Pastikan file S12.png ada di:<br>" + PATH_GAMBAR_PETA + "</center></html>", SwingConstants.CENTER);
+//            errorLabel.setForeground(Color.RED);
+//            errorLabel.setFont(new Font("Monospaced", Font.BOLD, 12));
+//            panelPeta.add(errorLabel, BorderLayout.CENTER);
+//        } else {
+//            Image img = originalIcon.getImage();
 //
-//            // Masukin browsernya ke panel
-//            panelPeta.setScene(new Scene(webView));
-//        });
-
-        // === PANEL KIRI (GAMBAR STATIS) ===
-        JPanel panelPeta = new JPanel(new BorderLayout());
-        panelPeta.setBorder(BorderFactory.createTitledBorder("📍 Area Operasi (Static Map)"));
-        panelPeta.setPreferredSize(new Dimension(600, 500));
-        panelPeta.setBackground(Color.BLACK); // Background hitam biar elegan
-
-        // Logic Load Gambar
-        // Debugging: Print path-nya biar Senpai tau dia nyari kemana
-
-        ImageIcon originalIcon = new ImageIcon(PATH_GAMBAR_PETA);
-
-        // Cek gambarnya ketemu gak? (Kalau width -1 berarti gak ketemu)
-        if (originalIcon.getIconWidth() == -1) {
-            // Kalau gambar GAK ADA, tampilin pesan error keren
-            JLabel errorLabel = new JLabel("<html><center>❌ MAP IMAGE NOT FOUND<br>Pastikan file S12.png ada di:<br>" + PATH_GAMBAR_PETA + "</center></html>", SwingConstants.CENTER);
-            errorLabel.setForeground(Color.RED);
-            errorLabel.setFont(new Font("Monospaced", Font.BOLD, 12));
-            panelPeta.add(errorLabel, BorderLayout.CENTER);
-        } else {
-            Image img = originalIcon.getImage();
-
-            Image resizedImg = img.getScaledInstance(600, 480, Image.SCALE_SMOOTH);
-            JLabel mapLabel = new JLabel(new ImageIcon(resizedImg));
-
-            panelPeta.add(mapLabel, BorderLayout.CENTER);
-        }
+//            Image resizedImg = img.getScaledInstance(600, 480, Image.SCALE_SMOOTH);
+//            JLabel mapLabel = new JLabel(new ImageIcon(resizedImg));
+//
+//            panelPeta.add(mapLabel, BorderLayout.CENTER);
+//        }
 
         add(panelPeta, BorderLayout.CENTER);
 
