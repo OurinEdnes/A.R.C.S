@@ -20,46 +20,46 @@ public class DatabasePortable {
     // 3. Format JDBC URL buat SQLite
     static final String DB_URL = "jdbc:sqlite:" + DB_FILE_PATH;
 
-    public static void main(String[] args) {
-        System.out.println(" --- MEMULAI SISTEM DATABASE A.R.C.S (PORTABLE MODE by Aiko) --- \n");
-
-        // Debugging Path biar Senpai tenang hatinya
-        System.out.println("Root Project : " + PROJECT_ROOT);
-        System.out.println("Target Folder: " + DB_DIR_PATH);
-        System.out.println("Target DB    : " + DB_FILE_PATH);
-        System.out.println("--------------------------------------------------\n");
-
-        DatabasePortable db = new DatabasePortable();
-        db.createNewTables();
-
-        System.out.println("\n --- SEKSI PILOT (Auto-Reset Mode) ---");
-        // Data lama akan hilang, diganti yang ini
-        db.insertPilot("PLT-001", "Handoyo", "LIC-GOD-MODE");
-        showData("Pilot", "SELECT * FROM Pilot");
-
-        // 3. Simulasi Data TIPE UAV
-        System.out.println("\n --- SEKSI TIPE UAV (Auto-Reset Mode) ---");
-        db.insertUAVType("COMP-01", "Fixed Wing Long Range");
-        showData("Type_UAV", "SELECT * FROM Type_UAV");
-
-        // 4. Simulasi KOMPONEN
-        System.out.println("\n --- SEKSI KOMPONEN (Auto-Reset Mode) ---");
-        // Aiko note: CamAdd tadinya INT, sekarang harus TEXT karena isinya URL
-        db.insertComponent("COMP-01", "Sony A6000", "Velodyne VLP-16", "FLIR Vue Pro", "http://192.168.137.225:8080/video");
-        showData("UAV_Components", "SELECT * FROM UAV_Components");
-
-        // 5. Simulasi GCS (Ground Control Station)
-        System.out.println("\n --- SEKSI GCS (Auto-Reset Mode) ---");
-        db.insertGCS("GCS-DIY", "Yogyakarta Base HQ");
-        showData("GCS", "SELECT * FROM GCS");
-
-        // 6. Simulasi MISI (Task)
-        System.out.println("\n --- SEKSI MISI (Auto-Reset Mode) ---");
-        db.insertMission(101, "Searching Korban", "Locating korban bencana");
-        showData("Mission_Task", "SELECT * FROM Mission_Task");
-
-        System.out.println("\n--- SEMUA SISTEM BERJALAN LANCAR! OTSUKARE SENPAI! --- ");
-    }
+//    public static void main(String[] args) {
+//        System.out.println(" --- MEMULAI SISTEM DATABASE A.R.C.S (PORTABLE MODE by Aiko) --- \n");
+//
+//        // Debugging Path biar Senpai tenang hatinya
+//        System.out.println("Root Project : " + PROJECT_ROOT);
+//        System.out.println("Target Folder: " + DB_DIR_PATH);
+//        System.out.println("Target DB    : " + DB_FILE_PATH);
+//        System.out.println("--------------------------------------------------\n");
+//
+//        DatabasePortable db = new DatabasePortable();
+//        db.createNewTables();
+//
+//        System.out.println("\n --- SEKSI PILOT (Auto-Reset Mode) ---");
+//        // Data lama akan hilang, diganti yang ini
+//        db.insertPilot("PLT-001", "Handoyo", "LIC-GOD-MODE");
+//        showData("Pilot", "SELECT * FROM Pilot");
+//
+//        // 3. Simulasi Data TIPE UAV
+//        System.out.println("\n --- SEKSI TIPE UAV (Auto-Reset Mode) ---");
+//        db.insertUAVType("COMP-01", "Fixed Wing Long Range");
+//        showData("Type_UAV", "SELECT * FROM Type_UAV");
+//
+//        // 4. Simulasi KOMPONEN
+//        System.out.println("\n --- SEKSI KOMPONEN (Auto-Reset Mode) ---");
+//        // Aiko note: CamAdd tadinya INT, sekarang harus TEXT karena isinya URL
+//        db.insertComponent("COMP-01", "Sony A6000", "Velodyne VLP-16", "FLIR Vue Pro", "http://192.168.137.225:8080/video");
+//        showData("UAV_Components", "SELECT * FROM UAV_Components");
+//
+//        // 5. Simulasi GCS (Ground Control Station)
+//        System.out.println("\n --- SEKSI GCS (Auto-Reset Mode) ---");
+//        db.insertGCS("GCS-DIY", "Yogyakarta Base HQ");
+//        showData("GCS", "SELECT * FROM GCS");
+//
+//        // 6. Simulasi MISI (Task)
+//        System.out.println("\n --- SEKSI MISI (Auto-Reset Mode) ---");
+//        db.insertMission(101, "Searching Korban", "Locating korban bencana");
+//        showData("Mission_Task", "SELECT * FROM Mission_Task");
+//
+//        System.out.println("\n--- SEMUA SISTEM BERJALAN LANCAR! OTSUKARE SENPAI! --- ");
+//    }
 
     public void createNewTables() {
         // Aiko Check: Bikin folder dulu kalau belum ada!

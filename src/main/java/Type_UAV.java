@@ -1,7 +1,6 @@
 public class Type_UAV extends UAV {
     protected String type;
     protected String fungsi;
-    String StatI;
 
     public Type_UAV(String coordinate, String stat, float batt, String ID, int a, UavComp sensor) {
         super(coordinate, stat, batt, ID, sensor);
